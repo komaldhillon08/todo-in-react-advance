@@ -62,14 +62,31 @@ export default function Todo() {
                     {list.map((todo) => (
                         <li key={todo.id} className="border-b p-4 w-full bg-white text-lg flex items-center justify-between rounded-t-sm">
                             <div className="flex items-center">
-                                <span onClick={() => handleChack(todo.id)} className="rounded-full border-2 border-blue-100 w-6 h-6 flex items-center justify-center mr-5 bg-black  ">
+                                
+                                <span>
+                                        {/* <input 
+                                        type="checkbox" 
+                                         onClick={() => handleChack(todo.id)}  
+                                         className="rounded-full border-2 border-blue-100 w-6 h-6 flex items-center justify-center mr-5 bg-black  " /> */}
 
+                                    <input
+                                        type="checkbox"
+                                        className="
+                                            appearance-none w-6 h-6 rounded-full border-2 border-blue-500 mr-3
+                                            checked:bg-blue-500 checked:border-blue-500
+                                            checked:after:content-['✓'] checked:after:text-white checked:after:block checked:after:text-center checked:after:leading-5"
+                                        />
+
+
+
+
+                                </span>
                                     {todo.isSelected && (
                                         <img className="" src="../public/icon-check.svg" alt="check-box-img" />
                                     )  }
                                     {/* <input className type="checkbox" /> */}
-                                </span>
-                                <span>{todo.text}</span>
+                                
+                                <span className={todo.isSelected ?  "line-through text-gray-500" : undefined}>{todo.text}</span>
                             </div>
                             <span className="cursor-pointer " onClick={() => removeList(todo.id)}>
                                 <img src="../public/icon-cross.svg" alt="cross-img" />
