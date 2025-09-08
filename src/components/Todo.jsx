@@ -1,9 +1,15 @@
 import { useState } from "react"
+import { ThemeProvider, useTheme } from "../theme/demo.jsx";
+import MoonImg from "../../public/icon-moon.svg"
+import SunImg from "../../public/icon-moon.svg"
 
 export default function Todo() {
     const [list, setList] = useState([]);
     const [input, setInput] = useState("");
     // const [checkBox , setCheckBox] = useState(false);
+    const [listCC, setListCC] = useState("all")
+
+    const { theme, setTheme } = useTheme()
 
     function handleAddList(e) {
         e.preventDefault();
@@ -33,60 +39,109 @@ export default function Todo() {
                 todo.id === id ? { ...todo, isSelected: !todo.isSelected } : todo
             )
         )
+        setInput("")
     }
-   
+    /*  function handleActive(filterType) {
+         console.log("komal");
+         const filterTodos = list.filter(todo => {
+             if (filterType === "active") {
+                 console.log("komal check ?", todo);
+                 return !todo.isSelected === true
+             }
+ 
+             else if (filterType === "completed") {
+                 return todo.isSelected === false
+             }
+             else {
+                 return todo
+             }
+         })
+         setList(filterTodos)
+         console.log("check", filterTodos);
+     } */
+
+
+
+    const filterTodos = list.filter(todo => {
+        if (listCC === "active") {
+            console.log("komal check ?", todo);
+            return !todo.isSelected === true
+        }
+
+        else if (listCC === "completed") {
+            return todo.isSelected === false
+        }
+        else {
+            return true
+        }
+    })
+
+    function clearCompleted() {
+        setList([])
+    }
+
+
 
 
 
     return (
         <>
-            <section className="">
-                <div className="bg-[url('../public/bg-desktop-light.jpg')] bg-cover h-70 pt-17">
-                    <div className="w-1/3 mx-auto">
+            <section className="dark:bg-black bg-white">
+                <div className="bg-[url('../public/bg-desktop-light.jpg')] bg-cover h-70 pt-17 ">
+                    <div className="w-1/3 mx-auto ">
                         <div className="flex  justify-between  mx-auto items-center mb-12">
                             <h1 className="text-4xl text-white tracking-widest">TODO</h1>
-                            <span className="cursor-pointer"> <img src="../public/icon-moon.svg" alt="moon-icon" /></span>
+                            {/* <span className="cursor-pointer"> <img src="../public/icon-moon.svg" alt="moon-icon" /></span> */}
+
+
+                            {
+                                theme === 'light' ? (
+                                    <div className='p-2 cursor-pointer' onClick={() => setTheme('dark')}>
+                                        <img src={SunImg} alt="Dark Mode" />
+
+                                    </div>
+                                ) : (
+                                    <div className='p-2 cursor-pointer' onClick={() => setTheme('light')}>
+                                        <img src={MoonImg} alt="Light Mode" />
+
+
+                                    </div>
+                                )
+                            }
                         </div>
                         <form onSubmit={handleAddList}>
                             <input
-                                className="p-4 w-full bg-white rounded"
+                                className="p-4 w-full bg-white rounded "
                                 type="text"
                                 onChange={(e) => setInput(e.target.value)}
+                                value={input}
                             />
                         </form>
                     </div>
                 </div>
-                <ul className="w-1/3  flex justify-center mx-auto flex-col border-0  outline-0 rounded-2xl -mt-10">
+                <ul className="w-1/3  flex justify-center mx-auto flex-col border-0  outline-0 rounded-2xl -mt-10 ">
+                    {/* {list.map((todo) => ( */}
+                    {filterTodos.map((todo) => (
+                        <li
+                            key={todo.id}
+                            className="border-b p-4 w-full bg-white text-lg flex items-center justify-between rounded-t-sm cursor-pointer"
 
 
-                    {list.map((todo) => (
-                        <li key={todo.id} className="border-b p-4 w-full bg-white text-lg flex items-center justify-between rounded-t-sm">
-                            <div className="flex items-center">
-                                
-                                <span>
-                                        {/* <input 
-                                        type="checkbox" 
-                                         onClick={() => handleChack(todo.id)}  
-                                         className="rounded-full border-2 border-blue-100 w-6 h-6 flex items-center justify-center mr-5 bg-black  " /> */}
-
+                        >
+                            <div className="flex items-center ">
+                                <span className="flex items-center">
                                     <input
                                         type="checkbox"
-                                        className="
-                                            appearance-none w-6 h-6 rounded-full border-2 border-blue-500 mr-3
-                                            checked:bg-blue-500 checked:border-blue-500
-                                            checked:after:content-['✓'] checked:after:text-white checked:after:block checked:after:text-center checked:after:leading-5"
-                                        />
-
-
-
-
+                                        onClick={() => handleChack(todo.id)}
+                                        className="appearance-none w-5 h-5 rounded-full border-1 border-gray-500 mr-3
+                                        checked:bg-blue-500 checked:border-blue-500 cursor-pointer
+                                        checked:after:content-['✓'] checked:after:text-white checked:after:block checked:after:text-center checked:after:leading-5"
+                                    />
                                 </span>
-                                    {todo.isSelected && (
-                                        <img className="" src="../public/icon-check.svg" alt="check-box-img" />
-                                    )  }
-                                    {/* <input className type="checkbox" /> */}
-                                
-                                <span className={todo.isSelected ?  "line-through text-gray-500" : undefined}>{todo.text}</span>
+
+                                <span
+
+                                    className={todo.isSelected ? "line-through text-gray-500" : undefined}>{todo.text}</span>
                             </div>
                             <span className="cursor-pointer " onClick={() => removeList(todo.id)}>
                                 <img src="../public/icon-cross.svg" alt="cross-img" />
@@ -95,14 +150,13 @@ export default function Todo() {
                     ))}
                     {list.length > 0 && (
                         <li className="border-b-1 p-4 w-full bg-white flex rounded-b-sm">
-                            < span className="w-1/3 text-sm">{list.length} items left</span>
+                            < span className="w-1/3  text-sm">{list.length} items left</span>
                             <ul className="flex text-sm justify-end  ">
-                                <li className="px-2"><a href="">All</a></li>
-                                <li className="px-2"><a href="">Active</a></li>
-                                <li className="px-2"><a href="">Completed</a></li>
-                                <li className="pl-3"><a href="">Clear completed</a></li>
+                                <li className="px-2 lg:pl-0 cursor-pointer " onClick={() => setListCC("all")} >All</li>
+                                <li className="px-2 lg:pl-0 cursor-pointer " onClick={() => setListCC("active")}>Active</li>
+                                <li className="px-2 lg:pl-0 cursor-pointer " onClick={() => setListCC("completed")}>Completed</li>
+                                <li className="pl-3 " onClick={clearCompleted}>Clear completed</li>
                             </ul>
-
                         </li>
                     )
                     }
