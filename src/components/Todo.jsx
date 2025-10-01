@@ -21,7 +21,7 @@ export default function Todo() {
         }
         setList([...list, newTodo])
         setInput("")
-        console.log("koaml");
+        // console.log("koaml");
 
     }
 
@@ -68,9 +68,7 @@ export default function Todo() {
     })
 
     function clearCompleted() {
-
         setList((prev) => prev.filter((clear) => !clear.isSelected))
-
     }
 
 

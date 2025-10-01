@@ -19,7 +19,7 @@ export const ThemeProvider = ({ children }) => {
         }
         else {
             root.setAttribute("data-theme", "dark");
-            root.classList.add("dark");
+            root.classList.add("dark"); 
         }
     }, [theme]);
 
